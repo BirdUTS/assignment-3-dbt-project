@@ -1,0 +1,93 @@
+version: 2
+
+models:
+  - name: dim_host
+    description: "Host dimension with SCD Type 2 tracking"
+    columns:
+      - name: host_key
+        description: "Surrogate key for host dimension (includes valid_from for uniqueness)"
+        tests:
+          - unique
+          - not_null
+      - name: host_id
+        description: "Natural key - unique host identifier"
+        tests:
+          - not_null
+
+  - name: dim_property
+    description: "Property dimension with SCD Type 2 tracking"
+    columns:
+      - name: property_key
+        description: "Surrogate key for property dimension"
+        tests:
+          - unique
+          - not_null
+      - name: listing_id
+        description: "Natural key - unique listing identifier"
+        tests:
+          - not_null
+
+  - name: dim_lga
+    description: "Local Government Area dimension"
+    columns:
+      - name: lga_key
+        description: "Surrogate key for LGA"
+        tests:
+          - unique
+          - not_null
+      - name: lga_code
+        description: "LGA code"
+        tests:
+          - unique
+          - not_null
+
+  - name: dim_date
+    description: "Date dimension covering May 2020 to April 2021"
+    columns:
+      - name: date_key
+        description: "Surrogate key for date"
+        tests:
+          - unique
+          - not_null
+      - name: date
+        description: "Actual date"
+        tests:
+          - unique
+          - not_null
+
+  - name: fact_listings
+    description: "Fact table for Airbnb listings with metrics"
+    columns:
+      - name: fact_key
+        description: "Surrogate key for fact table"
+        tests:
+          - unique
+          - not_null
+      - name: host_key
+        description: "Foreign key to dim_host"
+        tests:
+          - not_null
+          - relationships:
+              to: ref('dim_host')
+              field: host_key
+      - name: property_key
+        description: "Foreign key to dim_property"
+        tests:
+          - not_null
+          - relationships:
+              to: ref('dim_property')
+              field: property_key
+      - name: date_key
+        description: "Foreign key to dim_date"
+        tests:
+          - not_null
+          - relationships:
+              to: ref('dim_date')
+              field: date_key
+      - name: price
+        description: "Nightly price"
+        tests:
+          - not_null
+      - name: estimated_revenue
+        description: "Calculated: number_of_stays * price"
+

@@ -1,0 +1,79 @@
+# =============================================================================
+# dbt Project Configuration for Assignment 3
+# =============================================================================
+# Name your project! Project names should contain only lowercase characters
+# and underscores. A good package name should reflect your organization's
+# name or the intended use of these models
+name: 'assignment_3_airbnb'
+version: '1.0.0'
+config-version: 2
+
+# This setting configures which "profile" dbt uses for this project.
+profile: 'assignment_3_airbnb'
+
+# These configurations specify where dbt should look for different types of files.
+model-paths: ["models"]
+analysis-paths: ["analyses"]
+test-paths: ["tests"]
+seed-paths: ["seeds"]
+macro-paths: ["macros"]
+snapshot-paths: ["snapshots"]
+
+target-path: "target"
+clean-targets:
+  - "target"
+  - "dbt_packages"
+
+# =============================================================================
+# Model Configurations
+# =============================================================================
+models:
+  assignment_3_airbnb:
+    # Bronze layer - raw data views (just reference, loaded by Airflow)
+    bronze:
+      +materialized: view
+      +schema: bronze
+      
+    # Silver layer - cleaned and standardized data
+    silver:
+      +materialized: table
+      +schema: silver
+      +tags: ['silver']
+      
+    # Gold layer - star schema (dimensions and facts)
+    gold:
+      +materialized: table
+      +schema: gold
+      +tags: ['gold']
+      dimensions:
+        +materialized: table
+        +tags: ['dimension']
+      facts:
+        +materialized: table
+        +tags: ['fact']
+        
+    # Datamart layer - business views
+    datamart:
+      +materialized: view
+      +schema: datamart
+      +tags: ['datamart', 'business']
+
+# =============================================================================
+# Snapshot Configurations (SCD Type 2)
+# =============================================================================
+snapshots:
+  assignment_3_airbnb:
+    +target_schema: silver
+    +strategy: timestamp
+    +unique_key: id
+    +updated_at: scraped_date
+    +tags: ['snapshot', 'scd2']
+
+# =============================================================================
+# Seeds Configuration
+# =============================================================================
+seeds:
+  assignment_3_airbnb:
+    +schema: seeds
+    +quote_columns: false
+

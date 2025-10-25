@@ -1,0 +1,45 @@
+version: 2
+
+sources:
+  - name: bronze
+    description: "Raw data loaded by Airflow into the bronze schema"
+    schema: bronze
+    tables:
+      - name: raw_airbnb_listings
+        description: "Raw Airbnb listing data loaded monthly"
+        columns:
+          - name: listing_id
+            description: "Unique identifier for the listing"
+          - name: scraped_date
+            description: "Date when the data was scraped"
+          - name: host_id
+            description: "Unique identifier for the host"
+            
+      - name: raw_census_g01
+        description: "Census G01 - Selected Person Characteristics by Sex"
+        columns:
+          - name: lga_code_2016
+            description: "LGA code from 2016 census"
+            
+      - name: raw_census_g02
+        description: "Census G02 - Selected Medians and Averages"
+        columns:
+          - name: lga_code_2016
+            description: "LGA code from 2016 census"
+            
+      - name: raw_lga_code_mapping
+        description: "Mapping between LGA codes and names"
+        columns:
+          - name: lga_code
+            description: "LGA code"
+          - name: lga_name
+            description: "LGA name"
+            
+      - name: raw_lga_suburb_mapping
+        description: "Mapping between LGA names and suburbs"
+        columns:
+          - name: lga_name
+            description: "LGA name"
+          - name: suburb_name
+            description: "Suburb name"
+
