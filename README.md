@@ -121,7 +121,7 @@ dbt test
 
 ---
 
-**Author**: [Your Name]  
+**Author**: Wai Wing Tang
 **Assignment**: Big Data Engineering - Assignment 3  
 **Institution**: UTS
 
